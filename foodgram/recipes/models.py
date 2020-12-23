@@ -1,15 +1,17 @@
 from django.contrib.auth import get_user_model
 from django.db import models
-from django.utils.translation import gettext_lazy as _
 from django.template.defaultfilters import slugify
+from django.utils.translation import gettext_lazy as _
+from multiselectfield import MultiSelectField
 
 User = get_user_model()
 
 
-class RecipeTags(models.TextChoices):
-    BREAKFAST = 'breakfast', _('Breakfast')
-    LUNCH = 'lunch', _('Lunch')
-    DINNER = 'dinner', _('Dinner')
+TAGS = (
+    ('breakfast', _('Breakfast')),
+    ('lunch', _('Lunch')),
+    ('dinner', _('Dinner'))
+)
 
 
 class Ingredient(models.Model):
@@ -37,9 +39,11 @@ class Recipe(models.Model):
         through='RecipeIngredients',
         verbose_name=_('Ingredients')
     )
-    tag = models.CharField(
+    tag = MultiSelectField(
         _('Tags'),
-        choices=RecipeTags
+        choices=TAGS,
+        max_choices=3,
+        max_length=3
     )
     cooking_time = models.SmallIntegerField(
         _('Cooking time')
