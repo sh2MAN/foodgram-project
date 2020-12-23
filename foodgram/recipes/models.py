@@ -1,6 +1,6 @@
 from django.contrib.auth import get_user_model
 from django.db import models
-from django.utils.translation import ungettext_lazy as _
+from django.utils.translation import gettext_lazy as _
 from django.template.defaultfilters import slugify
 
 User = get_user_model()
@@ -14,8 +14,8 @@ class RecipeTags(models.TextChoices):
 
 class Ingredient(models.Model):
     """Ингридиенты"""
-    title = models.CharField(_('Ingredient'))
-    units = models.CharField(_('Unit of measure'))
+    title = models.CharField(_('Ingredient'), max_length=50)
+    units = models.CharField(_('Unit of measure'), max_length=10)
 
     class Meta:
         verbose_name = _('Ingredient')
@@ -29,7 +29,7 @@ class Recipe(models.Model):
         on_delete=models.CASCADE,
         related_name='user_recipes'
     )
-    title = models.CharField(_('Title'))
+    title = models.CharField(_('Title'), max_length=50)
     image = models.ImageField(_('Image of the dish'))
     description = models.TextField(_('Description'))
     ingredient = models.ManyToManyField(
@@ -39,7 +39,7 @@ class Recipe(models.Model):
     )
     tag = models.CharField(
         _('Tags'),
-        choices=RecipeTags.choices
+        choices=RecipeTags
     )
     cooking_time = models.SmallIntegerField(
         _('Cooking time')
@@ -53,8 +53,8 @@ class Recipe(models.Model):
 
 class RecipeIngredients(models.Model):
     """Связующая таблица между рецептом и ингридиентами для него"""
-    recipe = models.ForeignKey(Recipe)
-    ingredient = models.ForeignKey(Ingredient)
+    recipe = models.ForeignKey(Recipe, on_delete=models.CASCADE)
+    ingredient = models.ForeignKey(Ingredient, on_delete=models.CASCADE)
     quantity = models.SmallIntegerField(_('Quantity'))
 
     class Meta:
