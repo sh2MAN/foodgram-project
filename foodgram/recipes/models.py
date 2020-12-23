@@ -6,11 +6,10 @@ from django.template.defaultfilters import slugify
 User = get_user_model()
 
 
-TAGS = (
-    ('breakfast', _('Breakfast')),
-    ('lunch', _('Lunch')),
-    ('dinner', _('Dinner'))
-)
+class RecipeTags(models.TextChoices):
+    BREAKFAST = 'breakfast', _('Breakfast')
+    LUNCH = 'lunch', _('Lunch')
+    DINNER = 'dinner', _('Dinner')
 
 
 class Ingredient(models.Model):
@@ -40,7 +39,7 @@ class Recipe(models.Model):
     )
     tag = models.CharField(
         _('Tags'),
-        choices=TAGS
+        choices=RecipeTags.choices
     )
     cooking_time = models.SmallIntegerField(
         _('Cooking time')
