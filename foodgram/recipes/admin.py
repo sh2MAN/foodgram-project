@@ -6,7 +6,7 @@ from .models import Ingredient, Recipe, RecipeIngredients
 class RecipeAdmin(admin.ModelAdmin):
     model = Recipe
     list_display = ('title', 'author')
-    list_filter = ('author', 'title', 'tags')
+    list_filter = ('author', 'title', 'tag')
     ordering = ('-pub_date',)
 
 
@@ -18,7 +18,7 @@ class IngredientAdmin(admin.ModelAdmin):
 
 class RecipeIngredientsAdmin(admin.ModelAdmin):
     model = RecipeIngredients
-    list_display = ('recipe__title', 'ingredient__title')
+    list_display = ('recipe', 'ingredient')
 
 
 admin.site.register(Recipe, RecipeAdmin)

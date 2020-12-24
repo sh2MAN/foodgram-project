@@ -5,12 +5,12 @@ from .models import Favorite, Subscription, User
 
 class FavoriteAdmin(admin.ModelAdmin):
     model = Favorite
-    list_display = ('user__username', 'recipe__title')
+    list_display = ('user', 'recipe')
 
 
 class SubscriptionAdmin(admin.ModelAdmin):
     model = Subscription
-    list_display = ('user__username', 'author__username')
+    list_display = ('user', 'author')
 
 
 class UserAdmin(admin.ModelAdmin):
