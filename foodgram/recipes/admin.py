@@ -3,11 +3,17 @@ from django.contrib import admin
 from .models import Ingredient, Recipe, RecipeIngredients
 
 
+class IngredientsInline(admin.TabularInline):
+    model = RecipeIngredients
+    extra = 1
+
+
 class RecipeAdmin(admin.ModelAdmin):
     model = Recipe
     list_display = ('title', 'author')
     list_filter = ('author', 'title', 'tag')
     ordering = ('-pub_date',)
+    inlines = (IngredientsInline,)
 
 
 class IngredientAdmin(admin.ModelAdmin):
