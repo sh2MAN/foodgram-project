@@ -28,6 +28,9 @@ class Subscription(models.Model):
         verbose_name = 'Подписка'
         verbose_name_plural = 'Подписки'
 
+    def __str__(self):
+        return f'{self.user.username} -> {self.author.username}'
+
 
 class Favorite(models.Model):
     """Избранные рецепты пользователя"""
@@ -53,3 +56,6 @@ class Favorite(models.Model):
         ]
         verbose_name = 'Избранное'
         verbose_name_plural = 'Избранное'
+
+    def __str__(self):
+        return f'{self.user.username} -*** {self.recipe.title}'
