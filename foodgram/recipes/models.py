@@ -34,7 +34,7 @@ class Recipe(models.Model):
         related_name='user_recipes'
     )
     title = models.CharField('Название', max_length=50)
-    image = models.ImageField('Изображение', upload_to="media/recipes/")
+    image = models.ImageField('Изображение', upload_to="recipes/")
     description = models.TextField('Описание')
     ingredient = models.ManyToManyField(
         Ingredient,
