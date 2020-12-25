@@ -15,8 +15,23 @@ class SubscriptionAdmin(admin.ModelAdmin):
 
 class UserAdmin(admin.ModelAdmin):
     model = User
-    list_display = ('email', 'username', 'is_staff', 'is_active')
-    list_filter = ('email', 'username')
+    list_display = ('email', 'username', 'is_staff', 'is_active',)
+    list_filter = ('email', 'username', 'is_staff', 'is_active',)
+    fieldsets = (
+        (None, {'fields': ('username', 'email', 'password')}),
+        ('Description', {'fields': ('first_name', 'last_name')}),
+        ('Permissions', {'fields': ('is_staff', 'is_active')}),
+    )
+    add_fieldsets = (
+        (None, {
+            'classes': ('wide',),
+            'fields': (
+                'email', 'password1', 'password2', 'is_staff', 'is_active'
+            )
+        }),
+    )
+    search_fields = ('email', 'username')
+    ordering = ('email',)
 
 
 admin.site.unregister(User)
