@@ -34,7 +34,7 @@ class Recipe(models.Model):
         related_name='user_recipes'
     )
     title = models.CharField('Название', max_length=50)
-    image = models.ImageField('Изображение')
+    image = models.ImageField('Изображение', upload_to="media/recipes/")
     description = models.TextField('Описание')
     ingredient = models.ManyToManyField(
         Ingredient,
@@ -68,7 +68,7 @@ class RecipeIngredients(models.Model):
     """Связующая таблица между рецептом и ингридиентами для него"""
     recipe = models.ForeignKey(Recipe, on_delete=models.CASCADE)
     ingredient = models.ForeignKey(Ingredient, on_delete=models.CASCADE)
-    quantity = models.SmallIntegerField('Количество')
+    quantity = models.PositiveSmallIntegerField('Количество')
 
     class Meta:
         constraints = [
