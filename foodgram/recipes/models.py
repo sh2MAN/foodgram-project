@@ -22,6 +22,9 @@ class Ingredient(models.Model):
         verbose_name = 'Ингредиент'
         verbose_name_plural = 'Ингредиенты'
 
+    def __str__(self):
+        return f'{self.title} {self.units}'
+
 
 class Recipe(models.Model):
     """Рецепты"""
@@ -57,6 +60,9 @@ class Recipe(models.Model):
         verbose_name = 'Рецепт'
         verbose_name_plural = 'Рецепты'
 
+    def __str__(self):
+        return f'{self.title} от пользователя {self.author.username}'
+
 
 class RecipeIngredients(models.Model):
     """Связующая таблица между рецептом и ингридиентами для него"""
@@ -65,5 +71,11 @@ class RecipeIngredients(models.Model):
     quantity = models.SmallIntegerField('Количество')
 
     class Meta:
+        constraints = [
+            models.UniqueConstraint(
+                fields=['recipe', 'ingredient'],
+                name='unique_favorites'
+            )
+        ]
         verbose_name = 'Ингредиент в рецепте'
         verbose_name_plural = 'Ингредиент в рецепте(ах)'
