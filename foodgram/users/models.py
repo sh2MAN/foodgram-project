@@ -28,18 +28,23 @@ class Subscription(models.Model):
         verbose_name = 'Подписка'
         verbose_name_plural = 'Подписки'
 
+    def __str__(self):
+        return f'{self.user.username} -> {self.author.username}'
+
 
 class Favorite(models.Model):
     """Избранные рецепты пользователя"""
     user = models.ForeignKey(
         User,
         on_delete=models.CASCADE,
-        related_name='favorites'
+        related_name='favorites',
+        verbose_name='Пользователь'
     )
     recipe = models.ForeignKey(
         Recipe,
         on_delete=models.CASCADE,
-        related_name='favorite_user'
+        related_name='favorite_user',
+        verbose_name='Рецепт'
     )
 
     class Meta:
@@ -50,3 +55,7 @@ class Favorite(models.Model):
             )
         ]
         verbose_name = 'Избранное'
+        verbose_name_plural = 'Избранное'
+
+    def __str__(self):
+        return f'{self.user.username} -*** {self.recipe.title}'
