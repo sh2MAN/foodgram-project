@@ -9,7 +9,13 @@ User = get_user_model()
 
 
 def index(request):
-    recipe_list = Recipe.objects.select_related('author').all()
+    if request.GET.get('tags'):
+        tags = request.GET.get('tags')
+        recipe_list = Recipe.objects.filter(tag__contains=tags).select_related(
+            'author').all()
+    else:
+        recipe_list = Recipe.objects.select_related('author').all()
+
     paginator = Paginator(recipe_list, 6)
     page_number = request.GET.get('page')
     page = paginator.get_page(page_number)
