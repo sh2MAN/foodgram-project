@@ -33,7 +33,10 @@
     </header>
     <main class="main container">
         <div class="single-card" data-id="371" data-author="12">
-            <img src="{% static 'images/testCardImg.png' %}" alt="какой-то текст" class="single-card__image">
+            {% load thumbnail %}
+            {% thumbnail recipe.image "480x480" crop="center" upscale=True as image %}
+            <img src="{{ image.url }}" alt="Какой-то текст" class="single-card__image">
+            {% endthumbnail %}
             <div class="single-card__info">
                 <div class="single-card__header-info">
                     <h1 class="single-card__title">{{ recipe.title }}</h1>
@@ -58,7 +61,8 @@
                     <p class="single-card__text"><span class="icon-time"></span> {{ recipe.cooking_time }} мин.</p>
                     <ul class="single-card__items">
                         <li class="single-card__item">
-                            <p class="single-card__text"><span class="icon-user"></span> Вероника Чернова</p>
+                            <p class="single-card__text"><span class="icon-user"></span>
+                                {{ recipe.author.get_full_name}}</p>
                         </li>
                         <li class="single-card__item"> <a style="margin-left: 2.5em" href="#"
                                 class="single-card__text">Редактировать рецепт</a></li>

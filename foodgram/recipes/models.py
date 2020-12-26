@@ -66,7 +66,11 @@ class Recipe(models.Model):
 
 class RecipeIngredients(models.Model):
     """Связующая таблица между рецептом и ингридиентами для него"""
-    recipe = models.ForeignKey(Recipe, on_delete=models.CASCADE)
+    recipe = models.ForeignKey(
+        Recipe,
+        on_delete=models.CASCADE,
+        related_name='ingredients'
+    )
     ingredient = models.ForeignKey(Ingredient, on_delete=models.CASCADE)
     quantity = models.PositiveSmallIntegerField('Количество')
 
@@ -74,7 +78,7 @@ class RecipeIngredients(models.Model):
         constraints = [
             models.UniqueConstraint(
                 fields=['recipe', 'ingredient'],
-                name='unique_favorites'
+                name='unique_ingredients'
             )
         ]
         verbose_name = 'Ингредиент в рецепте'
