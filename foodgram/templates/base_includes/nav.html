@@ -13,7 +13,7 @@
         </ul>
         <ul class="nav__items list">
             <li class="nav__item"><a href="#" class="nav__link link">Изменить пароль</a></li>
-            <li class="nav__item"><a href="#" class="nav__link link">Выход</a></li>
+            <li class="nav__item"><a href="{% url 'logout' %}" class="nav__link link">Выход</a></li>
         </ul>
         {% else %}
         <ul class="nav__items list">
@@ -22,7 +22,7 @@
                         class="badge badge_style_blue nav__badge" id="counter">4</span></a></li>
         </ul>
         <ul class="nav__items list">
-            <li class="nav__item"><a href="#" class="nav__link link">Войти</a></li>
+            <li class="nav__item"><a href="{% url 'login' %}" class="nav__link link">Войти</a></li>
             <li class="nav__item"><a href="{% url 'signup' %}" class="button button_style_blue">Создать аккаунт</a></li>
         </ul>
         {% endif %}
