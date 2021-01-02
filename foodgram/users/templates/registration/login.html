@@ -1,8 +1,10 @@
 {% extends 'base.html' %}
-{% block title %}Войти на сайт{% endblock title %}
+
+{% load static %}
+{% block title %}
+Войти на сайт{% endblock title %}
 
 {% block statics %}
-{% load static %}
 <link rel="stylesheet" href="{% static 'pages/form.css' %}">
 {% endblock statics %}
 
@@ -39,3 +41,21 @@
     </form>
 </div>
 {% endblock content %}
+
+{% block scripts %}
+<script src="{% static 'js/components/MainCards.js' %}"></script>
+
+<script src="{% static 'js/components/Purchases.js' %}"></script>
+<script src="{% static 'js/components/Favorites.js' %}"></script>
+
+<script src="{% static 'js/config/config.js' %}"></script>
+<script src="{% static 'js/components/CardList.js' %}"></script>
+<script src="{% static 'js/components/Header.js' %}"></script>
+
+<script src="{% static 'js/api/Api.js' %}"></script>
+{% if user.is_authenticated %}
+<script src="{% static 'js/indexAuth.js' %}"></script>
+{% else %}
+<script src="{% static 'js/indexNotAuth.js' %}"></script>
+{% endif %}
+{% endblock scripts %}

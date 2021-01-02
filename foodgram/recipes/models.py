@@ -1,12 +1,13 @@
 from django.contrib.auth import get_user_model
 from django.db import models
+from django.shortcuts import get_object_or_404
 from django.template.defaultfilters import slugify
 from multiselectfield import MultiSelectField
 
 User = get_user_model()
 
 
-TAGS = (
+TAGS_VALUE = (
     ('breakfast', 'Завтрак'),
     ('lunch', 'Обед'),
     ('dinner', 'Ужин')
@@ -16,14 +17,14 @@ TAGS = (
 class Ingredient(models.Model):
     """Ингридиенты"""
     title = models.CharField('Ингредиент', max_length=50)
-    units = models.CharField('Мера веса', max_length=10)
+    dimension = models.CharField('Мера веса', max_length=10)
 
     class Meta:
         verbose_name = 'Ингредиент'
         verbose_name_plural = 'Ингредиенты'
 
     def __str__(self):
-        return f'{self.title} {self.units}'
+        return f'{self.title} {self.dimension}'
 
 
 class Recipe(models.Model):
@@ -33,7 +34,7 @@ class Recipe(models.Model):
         on_delete=models.CASCADE,
         related_name='user_recipes'
     )
-    title = models.CharField('Название', max_length=50)
+    title = models.CharField('Название рецепта', max_length=50)
     image = models.ImageField('Изображение', upload_to="recipes/")
     description = models.TextField('Описание')
     ingredient = models.ManyToManyField(
@@ -41,10 +42,11 @@ class Recipe(models.Model):
         through='RecipeIngredients',
         verbose_name='Ингредиенты'
     )
-    tag = MultiSelectField(
+    tags = MultiSelectField(
         'Тег',
-        choices=TAGS,
-        max_choices=3
+        choices=TAGS_VALUE,
+        max_choices=3,
+        null=True
     )
     cooking_time = models.PositiveSmallIntegerField(
         'Время приготовления'
@@ -83,3 +85,12 @@ class RecipeIngredients(models.Model):
         ]
         verbose_name = 'Ингредиент в рецепте'
         verbose_name_plural = 'Ингредиент в рецепте(ах)'
+
+    def add_ingredient(self, recipe, title, quantity):
+        ingredient = get_object_or_404(Ingredient, title=title)
+        print(ingredient, quantity)
+        return self.objects.get_or_create(
+            recipe=recipe,
+            ingredient=ingredient,
+            quantity=quantity
+        )

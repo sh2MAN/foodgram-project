@@ -11,14 +11,14 @@ class IngredientsInline(admin.TabularInline):
 class RecipeAdmin(admin.ModelAdmin):
     model = Recipe
     list_display = ('title', 'author')
-    list_filter = ('author', 'title', 'tag')
+    list_filter = ('author', 'title', 'tags')
     ordering = ('-pub_date',)
     inlines = (IngredientsInline,)
 
 
 class IngredientAdmin(admin.ModelAdmin):
     model = Ingredient
-    list_display = ('title', 'units')
+    list_display = ('title', 'dimension')
     list_filter = ('title',)
 
 
