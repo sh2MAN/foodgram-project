@@ -6,7 +6,7 @@ from django.http import JsonResponse
 
 from .forms import RecipeForm
 from .models import Recipe, Ingredient, RecipeIngredients
-from .helpers import get_list_ingredients
+from .helpers import get_list_ingredients, ingredients_create_or_delete
 
 User = get_user_model()
 
@@ -46,15 +46,17 @@ def add_recipe(request):
     if request.method == "POST" and form.is_valid():
         ingredients = get_list_ingredients(request.POST)
 
-        new_recipe = form.save(commit=False)
-        new_recipe.author = request.user
-        new_recipe.save()
+        recipe = form.save(commit=False)
+        recipe.author = request.user
+        recipe.save()
 
-        for name, value in ingredients:
-
-            RecipeIngredients.add_ingredient(
-                RecipeIngredients, new_recipe, name, value
+        for name, value in ingredients.items():
+            RecipeIngredients.objects.create(
+                recipe=recipe,
+                ingredient=Ingredient.objects.get(title=name),
+                quantity=value
             )
+        form.save_m2m()
         return redirect('index')
 
     return render(request, 'recipe_form.html', {'form': form})
@@ -65,20 +67,31 @@ def edit_recipe(request, author, recipe_id):
     if request.user.username != author:
         return redirect('recipe', author, recipe_id)
 
-    instance = get_object_or_404(
+    recipe = get_object_or_404(
         Recipe, pk=recipe_id, author__username=author
     )
-    ingredients = instance.ingredients.all()
     form = RecipeForm(
-        request.POST or None, files=request.FILES or None, instance=instance
+        request.POST or None, files=request.FILES or None, instance=recipe
     )
 
+    ingredients = get_list_ingredients(request.POST)
     if form.is_valid():
-        form.save()
+        RecipeIngredients.objects.filter(recipe=recipe).delete()
+
+        recipe = form.save(commit=False)
+        recipe.save()
+
+        for name, value in ingredients.items():
+            RecipeIngredients.objects.create(
+                recipe=recipe,
+                ingredient=Ingredient.objects.get(title=name),
+                quantity=value
+            )
+        form.save_m2m()
         return redirect('recipe', author, recipe_id)
 
     context = {
-        'form': form, 'ingredients': ingredients, 'tags_checked': instance.tags
+        'form': form, 'recipe': recipe
     }
 
     return render(request, 'recipe_form.html', context=context)

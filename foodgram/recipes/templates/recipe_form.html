@@ -29,7 +29,7 @@
                 <div class="tags">
                     {% for value, text in form.tags.field.choices %}
                     <div class="tags__item">
-                        <input type="checkbox" name="tags" id="id_{{ value }}" value="{{ value }}" class="tags__checkbox tags__checkbox_style_{{ value|get_color_tag }}" {% if value in tags_checked %} checked="checked" {% endif %}>
+                        <input type="checkbox" name="tags" id="id_{{ value }}" value="{{ value }}" class="tags__checkbox tags__checkbox_style_{{ value|get_color_tag }}" {% if value in recipe.tags %} checked="checked" {% endif %}>
                         <label for="id_{{ value }}" class="tags__label">{{ text }}</label>
                     </div>
                     {% endfor %}
@@ -49,17 +49,15 @@
                     <label for="cantidad" class="form__label" id="cantidadVal">шт.</label>
                 </div>
                 <div class="form__field-group-ingredientes-container">
-                    {% if ingredients %}
-                    {% for ingredient in ingredients %}
+                    {% for ingredient in recipe.ingredients.all %}
                     <div class="form__field-item-ingredient" id="ing_{{ ingredient.ingredient.id }}"><span>
-                            {{ ingredient.ingredient.title }} {{ ingredient.amount }}
+                            {{ ingredient.ingredient.title }} {{ ingredient.quantity }}
                             {{ ingredient.ingredient.dimension }}</span> <span class="form__field-item-delete"></span>
                         <input id="nameIngredient_{{ ingredient.ingredient.id }}" name="nameIngredient" type="hidden" value="{{ ingredient.ingredient.title }}">
-                        <input id="valueIngredient_{{ ingredient.ingredient.id }}" name="valueIngredient" type="hidden" value="{{ ingredient.amount }}">
+                        <input id="valueIngredient_{{ ingredient.ingredient.id }}" name="valueIngredient" type="hidden" value="{{ ingredient.quantity }}">
                         <input id="unitsIngredient_{{ ingredient.ingredient.id }}" name="unitsIngredient" type="hidden" value="{{ ingredient.ingredient.dimension }}">
                     </div>
                     {% endfor %}
-                    {% endif %}
                 </div>
                 <span class="form__ingredient-link" id="addIng">Добавить ингредиент</span>
                 <span class="form__error"></span>

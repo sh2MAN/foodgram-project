@@ -85,12 +85,3 @@ class RecipeIngredients(models.Model):
         ]
         verbose_name = 'Ингредиент в рецепте'
         verbose_name_plural = 'Ингредиент в рецепте(ах)'
-
-    def add_ingredient(self, recipe, title, quantity):
-        ingredient = get_object_or_404(Ingredient, title=title)
-        print(ingredient, quantity)
-        return self.objects.get_or_create(
-            recipe=recipe,
-            ingredient=ingredient,
-            quantity=quantity
-        )
