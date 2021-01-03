@@ -31,7 +31,6 @@ ALLOWED_HOSTS = ['*']
 # Application definition
 
 INSTALLED_APPS = [
-    'sorl.thumbnail',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -39,9 +38,11 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'users',
+    'api',
     'recipes',
     'multiselectfield',
     'django_cleanup',
+    'sorl.thumbnail',
 ]
 
 MIDDLEWARE = [
@@ -110,6 +111,10 @@ AUTH_PASSWORD_VALIDATORS = [
 LOGIN_URL = "/auth/login/"
 LOGOUT_URL = "/auth/logout/"
 LOGIN_REDIRECT_URL = "index"
+
+# URLS
+
+APPEND_SLASH = False
 
 
 # Internationalization
