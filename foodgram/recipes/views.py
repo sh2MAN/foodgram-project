@@ -28,6 +28,24 @@ def index(request):
     )
 
 
+def recipe_author(request, author):
+    author = get_object_or_404(User, username=author)
+    recipe_list = Recipe.objects.filter(author=author).all()
+    paginator = Paginator(recipe_list, 6)
+    page_number = request.GET.get('page')
+    page = paginator.get_page(page_number)
+    context = {
+        'author': author,
+        'page': page,
+        'paginator': paginator
+    }
+    return render(
+        request,
+        'authorRecipe.html',
+        context=context
+    )
+
+
 def recipe_single_page(request, author, recipe_id):
     author = get_object_or_404(User, username=author)
     recipe = get_object_or_404(Recipe, pk=recipe_id, author=author)
