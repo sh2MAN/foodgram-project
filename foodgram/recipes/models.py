@@ -1,6 +1,5 @@
 from django.contrib.auth import get_user_model
 from django.db import models
-from django.shortcuts import get_object_or_404
 from django.template.defaultfilters import slugify
 from multiselectfield import MultiSelectField
 
