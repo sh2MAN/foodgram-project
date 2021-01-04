@@ -52,6 +52,28 @@ class Favorite(LoginRequiredMixin, View):
         return JsonResponse({"success": True})
 
 
+class Purchase(LoginRequiredMixin, View):
+    def post(self, request):
+        req_ = json.loads(request.body)
+        recipe_id = req_.get("id", None)
+        if recipe_id is not None:
+            recipe = get_object_or_404(Recipe, id=recipe_id)
+            _, created = request.user.basket_recipes.get_or_create(
+                recipe=recipe
+            )
+            if created:
+                return JsonResponse({"success": True})
+            return JsonResponse({"success": False})
+        return JsonResponse({"success": False}, status=400)
+
+    def delete(self, request, recipe_id):
+        recipe = get_object_or_404(Recipe, id=recipe_id)
+        purchase = request.user.basket_recipes.filter(recipe=recipe)
+        if purchase:
+            purchase.delete()
+        return JsonResponse({"success": True})
+
+
 class Ingredients(LoginRequiredMixin, View):
     def get(self, request):
         text = request.GET['query']

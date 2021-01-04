@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from .models import Ingredient, Recipe, RecipeIngredients
+from .models import Ingredient, Recipe, RecipeIngredients, Basket
 
 
 class IngredientsInline(admin.TabularInline):
@@ -27,6 +27,13 @@ class RecipeIngredientsAdmin(admin.ModelAdmin):
     list_display = ('recipe', 'ingredient')
 
 
+class BasketAdmin(admin.ModelAdmin):
+    model = Basket
+    list_display = ('user', 'recipe')
+    list_filter = ('user',)
+
+
 admin.site.register(Recipe, RecipeAdmin)
 admin.site.register(Ingredient, IngredientAdmin)
 admin.site.register(RecipeIngredients, RecipeIngredientsAdmin)
+admin.site.register(Basket, BasketAdmin)

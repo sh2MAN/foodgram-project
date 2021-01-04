@@ -7,7 +7,7 @@ from django.db.models import Count
 
 from .forms import RecipeForm
 from .helpers import get_list_ingredients
-from .models import Ingredient, Recipe, RecipeIngredients
+from .models import Ingredient, Recipe, RecipeIngredients, Basket
 
 User = get_user_model()
 
@@ -151,3 +151,16 @@ def edit_recipe(request, author, recipe_id):
     }
 
     return render(request, 'recipe_form.html', context=context)
+
+
+@login_required
+def delete_recipe(request, author, recipe_id):
+    recipe = get_object_or_404(Recipe, id=recipe_id)
+    if request.user.username == author:
+        recipe.delete()
+    return redirect('index')
+
+
+def shopping_list(request):
+    recipes = Basket.objects.filter(user=request.user).all()
+    return render(request, 'shopList.html', {'recipes': recipes})

@@ -41,9 +41,11 @@ def is_favorite(recipe, user):
     return user.favorites.filter(recipe=recipe).exists()
 
 
-# @register.filter(name='is_shop')
-# def is_shop(recipe, user):
-#     return ShoppingList.objects.filter(user=user, recipe=recipe).exists()
+@register.filter(name='is_basket')
+def is_basket(recipe, user):
+    if user.is_authenticated:
+        return user.basket_recipes.filter(recipe=recipe).exists()
+
 
 @register.filter
 def num_other_recipes(num):

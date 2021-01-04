@@ -84,3 +84,22 @@ class RecipeIngredients(models.Model):
         ]
         verbose_name = 'Ингредиент в рецепте'
         verbose_name_plural = 'Ингредиент в рецепте(ах)'
+
+
+class Basket(models.Model):
+    user = models.ForeignKey(
+        User, on_delete=models.CASCADE, related_name='basket_recipes'
+    )
+    recipe = models.ForeignKey(
+        Recipe, on_delete=models.CASCADE, related_name='basket_users'
+    )
+
+    class Meta:
+        constraints = [
+            models.UniqueConstraint(
+                fields=['user', 'recipe'],
+                name='unique_recipes_basket'
+            )
+        ]
+        verbose_name = 'Список покупок'
+        verbose_name_plural = 'Список покупок'
