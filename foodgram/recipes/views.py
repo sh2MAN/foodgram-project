@@ -3,6 +3,7 @@ from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator
 from django.http import JsonResponse
 from django.shortcuts import get_object_or_404, redirect, render
+from django.db.models import Count
 
 from .forms import RecipeForm
 from .helpers import get_list_ingredients
@@ -30,7 +31,8 @@ def index(request):
 
 def recipe_author(request, author):
     author = get_object_or_404(User, username=author)
-    recipe_list = Recipe.objects.filter(author=author).all()
+    # recipe_list = Recipe.objects.filter(author=author).all()
+    recipe_list = author.user_recipes.all()
     paginator = Paginator(recipe_list, 6)
     page_number = request.GET.get('page')
     page = paginator.get_page(page_number)
@@ -59,6 +61,8 @@ def recipe_single_page(request, author, recipe_id):
 
 @login_required
 def add_recipe(request):
+    form_title = 'Создание рецепта'
+    button_caption = 'Создать рецепт'
     form = RecipeForm(request.POST or None, files=request.FILES or None)
 
     if request.method == "POST" and form.is_valid():
@@ -77,11 +81,44 @@ def add_recipe(request):
         form.save_m2m()
         return redirect('index')
 
-    return render(request, 'recipe_form.html', {'form': form})
+    context = {
+        'form': form, 'form_title': form_title,
+        'button_caption': button_caption
+    }
+
+    return render(request, 'recipe_form.html', context=context)
+
+
+def favorite(request):
+    tag = request.GET.getlist('filters')
+    recipes = request.user.favorites.all()
+    if tag:
+        recipes = recipes.filter(
+            tags__slug__in=tag).distinct()
+    paginator = Paginator(recipes, 6)
+    page_number = request.GET.get('page')
+    page = paginator.get_page(page_number)
+    context = {'page': page, 'paginator': paginator}
+    return render(request, 'favorite.html', context=context)
+
+
+def my_subscribe(request):
+    authors = request.user.subscriber.annotate(
+        num_recipe=Count('author__user_recipes')
+    ).all()
+    print(authors)
+    paginator = Paginator(authors, 6)
+    page_number = request.GET.get('page')
+    page = paginator.get_page(page_number)
+    context = {'page': page, 'paginator': paginator}
+    return render(request, 'myFollow.html', context=context)
 
 
 @login_required
 def edit_recipe(request, author, recipe_id):
+    form_title = 'Редактирование рецепта'
+    button_caption = 'Сохранить'
+
     if request.user.username != author:
         return redirect('recipe', author, recipe_id)
 
@@ -109,15 +146,8 @@ def edit_recipe(request, author, recipe_id):
         return redirect('recipe', author, recipe_id)
 
     context = {
-        'form': form, 'recipe': recipe
+        'form': form, 'recipe': recipe, 'is_edit': True,
+        'form_title': form_title, 'button_caption': button_caption
     }
 
     return render(request, 'recipe_form.html', context=context)
-
-
-def get_ingredients(request):
-    if request.method == 'GET':
-        query = request.GET.get("query")
-        ingredients = Ingredient.objects.filter(
-            title__icontains=query).values('title', 'dimension')
-        return JsonResponse(list(ingredients), safe=False)

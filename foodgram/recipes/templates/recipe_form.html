@@ -1,6 +1,6 @@
 {% extends 'base.html' %}
 
-{% block title %}Создание рецепта{% endblock title %}
+{% block title %}{{ form_title }}{% endblock title %}
 
 {% load static %}
 {% load user_filters %}
@@ -11,7 +11,7 @@
 
 {% block content %}
 <div class="main__header">
-    <h1 class="main__title">Создание рецепта</h1>
+    <h1 class="main__title">{{ form_title }}</h1>
 </div>
 <div class="form-container">
     <form class="form" method="post" enctype="multipart/form-data">
@@ -86,7 +86,10 @@
             </div>
         </div>
         <div class="form__footer">
-            <button class="button button_style_blue">Создать рецепт</button>
+            <button class="button button_style_blue">{{ button_caption }}</button>
+            {% if is_edit %}
+            <a style="margin-left: 2.5em" href="#" class="form__ingredient-link">Удалить</a>
+            {% endif %}
         </div>
     </form>
 </div>
