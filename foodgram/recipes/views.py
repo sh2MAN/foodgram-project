@@ -1,22 +1,26 @@
+from functools import reduce
+
 from django.contrib.auth import get_user_model
 from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator
-from django.http import JsonResponse
+from django.db.models import Count, Q
 from django.shortcuts import get_object_or_404, redirect, render
-from django.db.models import Count
 
 from .forms import RecipeForm
 from .helpers import get_list_ingredients
-from .models import Ingredient, Recipe, RecipeIngredients, Basket
+from .models import Basket, Ingredient, Recipe, RecipeIngredients
 
 User = get_user_model()
 
 
 def index(request):
-    if request.GET.get('tags'):
-        tags = request.GET.get('tags')
+    tags = request.GET.get('tags', None)
+    if tags:
         recipe_list = Recipe.objects.filter(
-            tags__contains=tags
+            reduce(
+                lambda x, y: x | y, [Q(tags__contains=tag)
+                                     for tag in tags.split('|')]
+            )
         ).select_related('author').all()
     else:
         recipe_list = Recipe.objects.select_related('author').all()
@@ -25,21 +29,31 @@ def index(request):
     page_number = request.GET.get('page')
     page = paginator.get_page(page_number)
     return render(
-        request, 'index.html', {'page': page, 'paginator': paginator}
+        request, 'index.html', {'page': page,
+                                'paginator': paginator, 'tags': tags}
     )
 
 
 def recipe_author(request, author):
     author = get_object_or_404(User, username=author)
-    # recipe_list = Recipe.objects.filter(author=author).all()
-    recipe_list = author.user_recipes.all()
+    tags = request.GET.get('tags', None)
+    if tags:
+        recipe_list = author.user_recipes.filter(
+            reduce(
+                lambda x, y: x | y, [Q(tags__contains=tag)
+                                     for tag in tags.split('|')]
+            )
+        ).all()
+    else:
+        recipe_list = author.user_recipes.all()
     paginator = Paginator(recipe_list, 6)
     page_number = request.GET.get('page')
     page = paginator.get_page(page_number)
     context = {
         'author': author,
         'page': page,
-        'paginator': paginator
+        'paginator': paginator,
+        'tags': tags
     }
     return render(
         request,
@@ -86,22 +100,28 @@ def add_recipe(request):
         'button_caption': button_caption
     }
 
-    return render(request, 'recipe_form.html', context=context)
+    return render(request, 'formRecipe.html', context=context)
 
 
 def favorite(request):
-    tag = request.GET.getlist('filters')
-    recipes = request.user.favorites.all()
-    if tag:
-        recipes = recipes.filter(
-            tags__slug__in=tag).distinct()
+    tags = request.GET.get('tags', None)
+    if tags:
+        recipes = request.user.favorites.filter(
+            reduce(
+                lambda x, y: x | y, [Q(recipe__tags__contains=tag)
+                                     for tag in tags.split('|')]
+            )
+        ).all()
+    else:
+        recipes = request.user.favorites.all()
     paginator = Paginator(recipes, 6)
     page_number = request.GET.get('page')
     page = paginator.get_page(page_number)
-    context = {'page': page, 'paginator': paginator}
+    context = {'page': page, 'paginator': paginator, 'tags': tags}
     return render(request, 'favorite.html', context=context)
 
 
+@login_required
 def my_subscribe(request):
     authors = request.user.subscriber.annotate(
         num_recipe=Count('author__user_recipes')
@@ -150,7 +170,7 @@ def edit_recipe(request, author, recipe_id):
         'form_title': form_title, 'button_caption': button_caption
     }
 
-    return render(request, 'recipe_form.html', context=context)
+    return render(request, 'formRecipe.html', context=context)
 
 
 @login_required

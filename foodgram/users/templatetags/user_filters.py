@@ -63,3 +63,24 @@ def num_other_recipes(num):
     suffix = ['рецепт', 'рецепта', 'рецептов'][index]
 
     return f'Ещё {num_remaining_recipes} {suffix}...'
+
+
+@register.simple_tag
+def tags_filter(request, new_tag):
+    tags = ''
+    url = request.GET.copy()
+    if url.get('tags', None):
+        tags = set(
+            url.get('tags').split('|')
+        ).symmetric_difference([new_tag])
+        if not tags:
+            return request.path
+    url['tags'] = '|'.join(tags) or new_tag
+    return f'?{url.urlencode()}'
+
+
+@register.simple_tag
+def set_page(request, value):
+    request_object = request.GET.copy()
+    request_object["page"] = value
+    return request_object.urlencode()

@@ -11,3 +11,8 @@ def get_list_ingredients(obj):
     if len(name_ingridients) != len(value_ingredients):
         return redirect("add_recipe")
     return dict(zip(name_ingridients, value_ingredients))
+
+
+def tags(tag, new_tag):
+    list_tags = set(tag.split('&')).symmetric_difference([new_tag])
+    return '&'.join(list_tags)
