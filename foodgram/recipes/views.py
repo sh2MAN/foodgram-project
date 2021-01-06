@@ -1,14 +1,12 @@
-from functools import reduce
-
 from django.contrib.auth import get_user_model
 from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator
-from django.db.models import Count, Q
+from django.db.models import Count
 from django.shortcuts import get_object_or_404, redirect, render
 
 from .forms import RecipeForm
-from .helpers import get_list_ingredients
 from .models import Basket, Ingredient, Recipe, RecipeIngredients
+from .utils import get_filter_tags, get_list_ingredients
 
 User = get_user_model()
 
@@ -17,10 +15,7 @@ def index(request):
     tags = request.GET.get('tags', None)
     if tags:
         recipe_list = Recipe.objects.filter(
-            reduce(
-                lambda x, y: x | y, [Q(tags__contains=tag)
-                                     for tag in tags.split('|')]
-            )
+            get_filter_tags(tags)
         ).select_related('author').all()
     else:
         recipe_list = Recipe.objects.select_related('author').all()
@@ -39,10 +34,7 @@ def recipe_author(request, author):
     tags = request.GET.get('tags', None)
     if tags:
         recipe_list = author.user_recipes.filter(
-            reduce(
-                lambda x, y: x | y, [Q(tags__contains=tag)
-                                     for tag in tags.split('|')]
-            )
+            get_filter_tags(tags)
         ).all()
     else:
         recipe_list = author.user_recipes.all()
@@ -105,15 +97,13 @@ def add_recipe(request):
 
 def favorite(request):
     tags = request.GET.get('tags', None)
+    user = get_object_or_404(User, username=request.user.username)
     if tags:
-        recipes = request.user.favorites.filter(
-            reduce(
-                lambda x, y: x | y, [Q(recipe__tags__contains=tag)
-                                     for tag in tags.split('|')]
-            )
+        recipes = Recipe.objects.filter(author=user).filter(
+            get_filter_tags(tags)
         ).all()
     else:
-        recipes = request.user.favorites.all()
+        recipes = Recipe.objects.filter(author=user).all()
     paginator = Paginator(recipes, 6)
     page_number = request.GET.get('page')
     page = paginator.get_page(page_number)

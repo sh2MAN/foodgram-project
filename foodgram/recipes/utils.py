@@ -1,4 +1,6 @@
 from django.shortcuts import redirect
+from django.db.models import Q
+from functools import reduce
 
 
 def get_list_ingredients(obj):
@@ -13,6 +15,10 @@ def get_list_ingredients(obj):
     return dict(zip(name_ingridients, value_ingredients))
 
 
-def tags(tag, new_tag):
-    list_tags = set(tag.split('&')).symmetric_difference([new_tag])
-    return '&'.join(list_tags)
+def get_filter_tags(tags):
+    filter = reduce(
+        lambda x, y: x | y, [
+            Q(tags__contains=tag) for tag in tags.split('|')
+        ]
+    )
+    return filter
