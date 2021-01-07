@@ -20,14 +20,23 @@ def get_color_tag(arg):
 
 @register.filter
 def get_recipe_tags(tags_list):
+    """Список используемых тегов в карточке рецепта"""
     tags = ''
     if 'lunch' in tags_list:
-        tags += str('<li class="card__item"><span class="badge badge_style_green">Обед</span></li>')
+        tags += str(
+            '<li class="card__item"><span class="badge badge_style_green">'
+            'Обед</span></li>'
+        )
     if 'breakfast' in tags_list:
-        tags += str('<li class="card__item"><span class="badge badge_style_orange">Завтрак</span></li>')
+        tags += str(
+            '<li class="card__item"><span class="badge badge_style_orange">'
+            'Завтрак</span></li>'
+        )
     if 'dinner' in tags_list:
-        tags += str('<li class="card__item"><span class="badge badge_style_purple">Ужин</span></li>')
-
+        tags += str(
+            '<li class="card__item"><span class="badge badge_style_purple">'
+            'Ужин</span></li>'
+        )
     return tags
 
 
@@ -67,6 +76,7 @@ def num_other_recipes(num):
 
 @register.simple_tag
 def tags_filter(request, new_tag):
+    """Список тегов в строке запроса"""
     tags = ''
     url = request.GET.copy()
     if url.get('tags', None):

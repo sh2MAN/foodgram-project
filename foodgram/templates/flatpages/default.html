@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}{{ flatpage.title }}{% endblock title %}
+
+{% block statics %}
+<link rel="stylesheet" href="{% static 'pages/index.css' %}">
+{% endblock statics %}
+
+{% block content %}
+<div class="main__header">
+    <h1 class="main__title">{{ flatpage.title }}</h1>
+</div>
+<div class="card-list">
+    {{ flatpage.content }}
+</div>
+{% endblock content %}

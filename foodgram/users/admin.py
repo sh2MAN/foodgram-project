@@ -1,6 +1,9 @@
 from django.contrib import admin
+from django.contrib.auth import get_user_model
 
-from .models import Favorite, Subscription, User
+from .models import Favorite, Subscription
+
+User = get_user_model()
 
 
 class FavoriteAdmin(admin.ModelAdmin):
@@ -34,7 +37,7 @@ class UserAdmin(admin.ModelAdmin):
     ordering = ('email',)
 
 
-admin.site.unregister(User)
+# admin.site.unregister(User)
 admin.site.register(Favorite, FavoriteAdmin)
 admin.site.register(Subscription, SubscriptionAdmin)
-admin.site.register(User, UserAdmin)
+# admin.site.register(User, UserAdmin)
