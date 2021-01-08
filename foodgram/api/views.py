@@ -9,6 +9,8 @@ from recipes.models import Recipe, Ingredient
 
 
 class Subscribe(LoginRequiredMixin, View):
+    """Подписки"""
+
     def post(self, request):
         req_ = json.loads(request.body)
         author_id = req_.get("id", None)
@@ -31,6 +33,8 @@ class Subscribe(LoginRequiredMixin, View):
 
 
 class Favorite(LoginRequiredMixin, View):
+    """Избранное"""
+
     def post(self, request):
         req_ = json.loads(request.body)
         recipe_id = req_.get("id", None)
@@ -53,6 +57,8 @@ class Favorite(LoginRequiredMixin, View):
 
 
 class Purchase(LoginRequiredMixin, View):
+    """Список покупок"""
+
     def post(self, request):
         req_ = json.loads(request.body)
         recipe_id = req_.get("id", None)
@@ -75,6 +81,8 @@ class Purchase(LoginRequiredMixin, View):
 
 
 class Ingredients(LoginRequiredMixin, View):
+    """Поиск ингредиентов"""
+
     def get(self, request):
         text = request.GET['query']
         ingredients = list(Ingredient.objects.filter(

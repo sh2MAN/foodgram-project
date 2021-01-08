@@ -49,13 +49,14 @@
                     <label for="cantidad" class="form__label" id="cantidadVal">шт.</label>
                 </div>
                 <div class="form__field-group-ingredientes-container">
-                    {% for ingredient in recipe.ingredients.all %}
-                    <div class="form__field-item-ingredient" id="ing_{{ ingredient.ingredient.id }}"><span>
-                            {{ ingredient.ingredient.title }} {{ ingredient.quantity }}
-                            {{ ingredient.ingredient.dimension }}</span> <span class="form__field-item-delete"></span>
-                        <input id="nameIngredient_{{ ingredient.ingredient.id }}" name="nameIngredient" type="hidden" value="{{ ingredient.ingredient.title }}">
-                        <input id="valueIngredient_{{ ingredient.ingredient.id }}" name="valueIngredient" type="hidden" value="{{ ingredient.quantity }}">
-                        <input id="unitsIngredient_{{ ingredient.ingredient.id }}" name="unitsIngredient" type="hidden" value="{{ ingredient.ingredient.dimension }}">
+                    {% for ingredients in recipe.ingredients.all %}
+                    <div class="form__field-item-ingredient" id="ing_{{ ingredients.ingredient.id }}">
+                        <span>
+                            {{ ingredients.ingredient.title }} - {{ ingredients.quantity }} {{ ingredients.ingredient.dimension }}
+                        </span> <span class="form__field-item-delete"></span>
+                        <input id="nameIngredient_{{ ingredients.ingredient.id }}" name="nameIngredient_{{ ingredients.ingredient.id }}" type="hidden" value="{{ ingredients.ingredient.title }}">
+                        <input id="valueIngredient_{{ ingredients.ingredient.id }}" name="valueIngredient_{{ ingredients.ingredient.id }}" type="hidden" value="{{ ingredients.quantity }}">
+                        <input id="unitsIngredient_{{ ingredients.ingredient.id }}" name="unitsIngredient_{{ ingredients.ingredient.id }}" type="hidden" value="{{ ingredients.ingredient.dimension }}">
                     </div>
                     {% endfor %}
                 </div>

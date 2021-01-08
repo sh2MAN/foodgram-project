@@ -33,7 +33,7 @@ class Recipe(models.Model):
         on_delete=models.CASCADE,
         related_name='user_recipes'
     )
-    title = models.CharField('Название рецепта', max_length=50)
+    title = models.CharField('Название рецепта', max_length=100)
     image = models.ImageField('Изображение', upload_to="recipes/")
     description = models.TextField('Описание')
     ingredient = models.ManyToManyField(
@@ -42,7 +42,7 @@ class Recipe(models.Model):
         verbose_name='Ингредиенты'
     )
     tags = MultiSelectField(
-        'Тег',
+        'Теги',
         choices=TAGS_VALUE,
         max_choices=3,
         null=True
@@ -66,7 +66,7 @@ class Recipe(models.Model):
 
 
 class RecipeIngredients(models.Model):
-    """Связующая таблица между рецептом и ингридиентами для него"""
+    """Связующая таблица между рецептом и ингридиентами"""
     recipe = models.ForeignKey(
         Recipe,
         on_delete=models.CASCADE,
@@ -87,6 +87,7 @@ class RecipeIngredients(models.Model):
 
 
 class Basket(models.Model):
+    """Список покупок"""
     user = models.ForeignKey(
         User, on_delete=models.CASCADE, related_name='basket_recipes'
     )

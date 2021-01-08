@@ -7,4 +7,4 @@ from .forms import CreationForm
 class SingUp(CreateView):
     form_class = CreationForm
     success_url = reverse_lazy('index')
-    template_name = 'reg.html'
+    template_name = 'singUp.html'

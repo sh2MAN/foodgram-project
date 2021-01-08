@@ -2,14 +2,14 @@
 
 {% block title %}Регистрация{% endblock title %}
 
-{% block statics %}
 {% load static %}
+{% load user_filters %}
+
+{% block statics %}
 <link rel="stylesheet" href="{% static 'pages/form.css' %}">
 {% endblock statics %}
 
 {% block content %}
-<!-- {% load i18n %} -->
-{% load user_filters %}
 <div class="main__header">
     <h1 class="main__title">Регистрация</h1>
 </div>
@@ -28,6 +28,7 @@
             </div>
         </div>
         {% endfor %}
+
         <div class="form__footer">
             <button type="submit" class="button button_style_blue">Создать аккаунт</button>
         </div>

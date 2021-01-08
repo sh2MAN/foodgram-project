@@ -1,6 +1,6 @@
 {% load user_filters %}
 {% load thumbnail %}
-<div class="card-user" data-author="{{ author.id }}">
+<div class="card-user" data-author="{{ follow.author.id }}">
     <div class="card-user__header">
         <h2 class="card-user__title">{{ follow.author.get_full_name }}</h2>
     </div>

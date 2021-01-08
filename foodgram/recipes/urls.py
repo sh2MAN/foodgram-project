@@ -1,6 +1,6 @@
 from django.urls import path
 
-from . import views
+from . import views, utils
 
 urlpatterns = [
     path('', views.index, name='index'),
@@ -8,6 +8,7 @@ urlpatterns = [
     path('favorite/', views.favorite, name='favorite'),
     path('subscribe/', views.my_subscribe, name='subscribe'),
     path('shopping/', views.shopping_list, name='cart'),
+    path('download_basket', utils.download_basket, name='download_basket'),
     path('<str:author>/', views.recipe_author, name='profile'),
     path('<str:author>/<int:recipe_id>/edit/',
          views.edit_recipe, name='edit_recipe'),
