@@ -1,0 +1,61 @@
+{% extends 'base.html' %}
+
+{% load static %}
+{% block title %}
+Войти на сайт{% endblock title %}
+
+{% block statics %}
+<link rel="stylesheet" href="{% static 'pages/form.css' %}">
+{% endblock statics %}
+
+{% block content %}
+{% load user_filters %}
+<div class="main__header">
+    <h1 class="main__title">Войти на сайт</h1>
+</div>
+<div class="form-container">
+    <form class="form" method="post" action="{% url 'login' %}">
+        {% csrf_token %}
+        <div class="form__group">
+            <label for="{{ form.username.id_for_label }}" class="form__label">
+                {{ form.username.label }}
+            </label>
+            <div class="form__field-group">
+                {{ form.username|add_class:"form__input"}}
+                <span class="form__error">{{ field.errors }}</span>
+            </div>
+        </div>
+        <div class="form__group">
+            <label for="{{ form.password.id_for_label }}" class="form__label">
+                {{ form.password.label }}
+            </label>
+            <div class="form__field-group">
+                {{ form.password|add_class:"form__input"}}
+                <span class="form__error">{{ field.errors }}</span>
+            </div>
+        </div>
+        <div class="form__footer">
+            <button type="submit" class="button button_style_blue">Войти</button>
+            <a class="form__forgot-link" href="{% url 'password_reset' %}">Забыли пароль?</a>
+        </div>
+    </form>
+</div>
+{% endblock content %}
+
+{% block scripts %}
+<script src="{% static 'js/components/MainCards.js' %}"></script>
+
+<script src="{% static 'js/components/Purchases.js' %}"></script>
+<script src="{% static 'js/components/Favorites.js' %}"></script>
+
+<script src="{% static 'js/config/config.js' %}"></script>
+<script src="{% static 'js/components/CardList.js' %}"></script>
+<script src="{% static 'js/components/Header.js' %}"></script>
+
+<script src="{% static 'js/api/Api.js' %}"></script>
+{% if user.is_authenticated %}
+<script src="{% static 'js/indexAuth.js' %}"></script>
+{% else %}
+<script src="{% static 'js/indexNotAuth.js' %}"></script>
+{% endif %}
+{% endblock scripts %}

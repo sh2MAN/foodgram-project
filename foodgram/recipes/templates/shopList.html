@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+
+{% block title %}Список покупок{% endblock title %}
+
+{% load static %}
+
+{% block statics %}
+<link rel="stylesheet" href="{% static 'pages/shopList.css' %}">
+{% endblock statics %}
+
+{% block content %}
+<div class="main__header">
+    <h1 class="main__title">Список покупок {% if recipes.count == 0 %}пуст{% endif %}</h1>
+</div>
+<div class="card-list card-list_column">
+    <ul class="shopping-list">
+        {% for recipe in recipes %}
+        {% include 'includes/shopping_card.html' with recipe=recipe.recipe %}
+        {% endfor %}
+    </ul>
+    {% if recipes.count > 0 %}
+    <a href="{% url 'download_basket' %}"><button class="button button_style_blue">Скачать список</button></a>
+    {% endif %}
+</div>
+{% endblock content %}
+
+{% block scripts %}
+<script src="{% static 'js/config/config.js' %}"></script>
+<script src="{% static 'js/components/Header.js' %}"></script>
+<script src="{% static 'js/components/ShopList.js' %}"></script>
+<script src="{% static 'js/api/Api.js' %}"></script>
+<script src="{% static 'js/shopList.js' %}"></script>
+{% endblock %}
