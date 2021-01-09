@@ -15,8 +15,8 @@ TAGS_VALUE = (
 
 class Ingredient(models.Model):
     """Ингридиенты"""
-    title = models.CharField('Ингредиент', max_length=50)
-    dimension = models.CharField('Мера веса', max_length=10)
+    title = models.CharField('Ингредиент', max_length=100)
+    dimension = models.CharField('Мера веса', max_length=25)
 
     class Meta:
         verbose_name = 'Ингредиент'
