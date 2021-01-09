@@ -93,11 +93,10 @@
 
 ### Запуск проекта (на примере Linux)
 
-Перед тем, как начать: если вы не пользуетесь `Python 3`, вам нужно будет установить инструмент `virtualenv` при помощи `pip install virtualenv`. 
-Если вы используете `Python 3`, у вас уже должен быть модуль [venv](https://docs.python.org/3/library/venv.html), установленный в стандартной библиотеке.
+Для создания виртуального окружения воспользуйтесь модулем [venv](https://docs.python.org/3/library/venv.html), установленный в стандартной библиотеке Python3.
 
 - Создайте на своем компютере папку проекта foodgram `mkdir foodgram` и перейдите в нее `cd foodgram`
-- Склонируйте этот репозиторий в текущую папку `git clone https://github.com/sh2man/foodgram .`
+- Склонируйте этот репозиторий в текущую папку `git clone https://github.com/sh2man/foodgram-project .`
 - Создайте виртуальное окружение `python3 -m venv venv`
 - Активируйте виртуальное окружение `source venv/bin/activate` или `. venv/bin/activate`
 - Создайте файл `.env` командой `touch .env` и добавьте в него переменные окружения:
@@ -111,6 +110,7 @@ SECRET_KEY=... # секретный ключ
 DEBUG = True # данную опцию следует добавить для отладки
 ```
 - Установите зависимости `pip install -r requirements.txt`
+- Перейдите в каталог с проектом `cd foodgram/`
 - Накатите миграции `python manage.py migrate`
 - Создайте суперпользователя Django `python manage.py createsuperuser --username admin --email 'admin@example.com'`
 - Запустите сервер разработки Django `python manage.py runserver`
@@ -126,6 +126,7 @@ DEBUG = True # данную опцию следует добавить для о
 - Накатите миграции `sudo docker-compose exec web python manage.py migrate`
 - Соберите статику командой `sudo docker-compose exec web python manage.py collectstatic --no-input`
 - Создайте суперпользователя Django `sudo docker-compose exec web python manage.py createsuperuser --username admin --email 'admin@foodgram.ru'`
+- Загрузите список ингредиентов `sudo docker-compose exec web python manage.py loaddata fixtures.json`
 
 ## Деплой на удаленный сервер
 Для запуска проекта на удаленном сервере необходимо:
@@ -167,8 +168,8 @@ DEBUG=False
 ### После каждого обновления репозитория (`git push`) будет происходить:
 1. Проверка кода на стандарты `PEP8`.
 2. Сборка и публикация образа на `Docker Hub`.
-3. Автоматический деплой.
-4. Отправка уведомления в персональный чат.
+3. Автоматический деплой на сервер.
+4. Отправка уведомления в Telegram.
 
 ## В разработке использованы
 

@@ -1,5 +1,6 @@
 from django.contrib import admin
 from django.contrib.auth import get_user_model
+from django.contrib.auth.admin import UserAdmin
 
 from .models import Favorite, Subscription
 
@@ -16,7 +17,7 @@ class SubscriptionAdmin(admin.ModelAdmin):
     list_display = ('user', 'author')
 
 
-class UserAdmin(admin.ModelAdmin):
+class UserAdmin(UserAdmin):
     model = User
     list_display = ('email', 'username', 'is_staff', 'is_active',)
     list_filter = ('email', 'username', 'is_staff', 'is_active',)
@@ -37,7 +38,7 @@ class UserAdmin(admin.ModelAdmin):
     ordering = ('email',)
 
 
-# admin.site.unregister(User)
+admin.site.unregister(User)
 admin.site.register(Favorite, FavoriteAdmin)
 admin.site.register(Subscription, SubscriptionAdmin)
-# admin.site.register(User, UserAdmin)
+admin.site.register(User, UserAdmin)
