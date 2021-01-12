@@ -13,7 +13,7 @@ class Subscribe(LoginRequiredMixin, View):
 
     def post(self, request):
         req_ = json.loads(request.body)
-        author_id = req_.get("id", None)
+        author_id = req_.get("id")
         if author_id is not None:
             author = get_object_or_404(User, id=author_id)
             _, created = request.user.subscriber.get_or_create(
@@ -26,9 +26,7 @@ class Subscribe(LoginRequiredMixin, View):
 
     def delete(self, request, author_id):
         author = get_object_or_404(User, id=author_id)
-        subscriber = request.user.subscriber.filter(author=author)
-        if subscriber:
-            subscriber.delete()
+        request.user.subscriber.filter(author=author).delete()
         return JsonResponse({"success": True})
 
 
@@ -37,7 +35,7 @@ class Favorite(LoginRequiredMixin, View):
 
     def post(self, request):
         req_ = json.loads(request.body)
-        recipe_id = req_.get("id", None)
+        recipe_id = req_.get("id")
         if recipe_id is not None:
             recipe = get_object_or_404(Recipe, id=recipe_id)
             _, created = request.user.favorites.get_or_create(
@@ -50,9 +48,7 @@ class Favorite(LoginRequiredMixin, View):
 
     def delete(self, request, recipe_id):
         recipe = get_object_or_404(Recipe, id=recipe_id)
-        favorite = request.user.favorites.filter(recipe=recipe)
-        if favorite:
-            favorite.delete()
+        request.user.favorites.filter(recipe=recipe).delete()
         return JsonResponse({"success": True})
 
 
@@ -61,7 +57,7 @@ class Purchase(LoginRequiredMixin, View):
 
     def post(self, request):
         req_ = json.loads(request.body)
-        recipe_id = req_.get("id", None)
+        recipe_id = req_.get("id")
         if recipe_id is not None:
             recipe = get_object_or_404(Recipe, id=recipe_id)
             _, created = request.user.basket_recipes.get_or_create(
@@ -74,9 +70,7 @@ class Purchase(LoginRequiredMixin, View):
 
     def delete(self, request, recipe_id):
         recipe = get_object_or_404(Recipe, id=recipe_id)
-        purchase = request.user.basket_recipes.filter(recipe=recipe)
-        if purchase:
-            purchase.delete()
+        request.user.basket_recipes.filter(recipe=recipe).delete()
         return JsonResponse({"success": True})
 
 

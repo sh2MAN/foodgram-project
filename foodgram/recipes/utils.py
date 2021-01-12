@@ -15,7 +15,7 @@ def get_list_ingredients(obj):
         obj.get(val) for val in obj if val.startswith('valueIngredien')
     ]
     if len(name_ingridients) != len(value_ingredients):
-        return redirect("add_recipe")
+        return redirect('add_recipe')
     return dict(zip(name_ingridients, value_ingredients))
 
 
@@ -41,7 +41,7 @@ def download_basket(request):
     ).annotate(
         total_quantity=Sum('quantity')
     )
-    file_text = ""
+    file_text = ''
 
     for item in ingredients:
         title, dimension, quantity = item.values()

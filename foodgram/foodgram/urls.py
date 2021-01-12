@@ -5,24 +5,24 @@ from django.conf import settings
 from django.contrib.flatpages import views
 from django.conf.urls.static import static
 
-handler404 = "foodgram.views.page_not_found"  # noqa
-handler500 = "foodgram.views.server_error"  # noqa
+handler404 = 'foodgram.views.page_not_found'  # noqa
+handler500 = 'foodgram.views.server_error'  # noqa
 
 urlpatterns = [
     path('auth/', include('users.urls')),
     path('admin/', admin.site.urls),
     path('api/', include('api.urls')),
     path(
-        "about-author/",
+        'about-author/',
         views.flatpage,
-        {"url": "/about-author/"},
-        name="about_author",
+        {'url': '/about-author/'},
+        name='about_author',
     ),
     path(
-        "about-spec/",
+        'about-spec/',
         views.flatpage,
-        {"url": "/about-spec/"},
-        name="about_spec",
+        {'url': '/about-spec/'},
+        name='about_spec',
     ),
     path('', include('recipes.urls')),
 ]

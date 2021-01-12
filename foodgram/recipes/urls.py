@@ -10,10 +10,16 @@ urlpatterns = [
     path('shopping/', views.shopping_list, name='cart'),
     path('download_basket', utils.download_basket, name='download_basket'),
     path('<str:author>/', views.recipe_author, name='profile'),
-    path('<str:author>/<int:recipe_id>/edit/',
-         views.edit_recipe, name='edit_recipe'),
-    path('<str:author>/<int:recipe_id>/delete/',
-         views.delete_recipe, name='delete_recipe'),
+    path(
+        '<str:author>/<int:recipe_id>/edit/',
+        views.edit_recipe,
+        name='edit_recipe'
+    ),
+    path(
+        '<str:author>/<int:recipe_id>/delete/',
+        views.delete_recipe,
+        name='delete_recipe'
+    ),
     path(
         '<str:author>/<int:recipe_id>/',
         views.recipe_single_page,

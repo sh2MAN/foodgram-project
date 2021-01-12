@@ -10,7 +10,7 @@
             {% thumbnail recipe.image "72x72" crop="center" upscale=True as image %}
             <li class="card-user__item">
                 <div class="recipe">
-                    <img src="{{ image.url }}" alt="какой-то-текст" class="recipe__image">
+                    <img src="{{ image.url }}" alt="картинка рецепта {{ recipe.title }}" class="recipe__image">
                     <h3 class="recipe__title">{{ recipe.title }}</h3>
                     <p class="recipe__text"><span class="icon-time"></span> {{ recipe.cooking_time }} мин.</p>
                 </div>

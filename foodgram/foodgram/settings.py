@@ -145,3 +145,6 @@ EMAIL_BACKEND = "django.core.mail.backends.filebased.EmailBackend"
 
 # указываем директорию, в которую будут складываться файлы писем
 EMAIL_FILE_PATH = os.path.join(BASE_DIR, "sent_emails")
+
+# Количество блоков элементов выводимых на страницу (рецепты, избанное и т.д.)
+NUM_ELEMENTS_PER_PAGE = 6

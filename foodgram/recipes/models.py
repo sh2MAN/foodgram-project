@@ -1,16 +1,8 @@
 from django.contrib.auth import get_user_model
 from django.db import models
-from django.template.defaultfilters import slugify
 from multiselectfield import MultiSelectField
 
 User = get_user_model()
-
-
-TAGS_VALUE = (
-    ('breakfast', 'Завтрак'),
-    ('lunch', 'Обед'),
-    ('dinner', 'Ужин')
-)
 
 
 class Ingredient(models.Model):
@@ -28,13 +20,26 @@ class Ingredient(models.Model):
 
 class Recipe(models.Model):
     """Рецепты"""
+    BREAKFAST = 'breakfast'
+    LUNCH = 'lunch'
+    DINNER = 'dinner'
+    TAGS_CHOICES = [
+        (BREAKFAST, 'Завтрак'),
+        (LUNCH, 'Обед'),
+        (DINNER, 'Ужин')
+    ]
+    TAGS_COLORS = {
+        BREAKFAST: 'orange',
+        LUNCH: 'green',
+        DINNER: 'purple'
+    }
     author = models.ForeignKey(
         User,
         on_delete=models.CASCADE,
-        related_name='user_recipes'
+        related_name='recipes'
     )
     title = models.CharField('Название рецепта', max_length=100)
-    image = models.ImageField('Изображение', upload_to="recipes/")
+    image = models.ImageField('Изображение', upload_to='recipes/')
     description = models.TextField('Описание')
     ingredient = models.ManyToManyField(
         Ingredient,
@@ -43,14 +48,13 @@ class Recipe(models.Model):
     )
     tags = MultiSelectField(
         'Теги',
-        choices=TAGS_VALUE,
+        choices=TAGS_CHOICES,
         max_choices=3,
         null=True
     )
     cooking_time = models.PositiveSmallIntegerField(
         'Время приготовления'
     )
-    slug = slugify(title)
     pub_date = models.DateTimeField(
         'Дата публикации',
         auto_now=True
