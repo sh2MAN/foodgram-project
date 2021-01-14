@@ -1,11 +1,11 @@
-from django.http import JsonResponse
-from django.views import View
-from django.contrib.auth.mixins import LoginRequiredMixin
-from django.shortcuts import get_object_or_404
 import json
 
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.http import JsonResponse
+from django.shortcuts import get_object_or_404, redirect
+from django.views import View
+from recipes.models import Ingredient, Recipe
 from users.models import User
-from recipes.models import Recipe, Ingredient
 
 
 class Subscribe(LoginRequiredMixin, View):
@@ -71,14 +71,14 @@ class Purchase(LoginRequiredMixin, View):
     def delete(self, request, recipe_id):
         recipe = get_object_or_404(Recipe, id=recipe_id)
         request.user.basket_recipes.filter(recipe=recipe).delete()
-        return JsonResponse({"success": True})
+        return redirect('subscribe')
 
 
 class Ingredients(LoginRequiredMixin, View):
     """Поиск ингредиентов"""
 
     def get(self, request):
-        text = request.GET['query']
+        text = request.GET['query'].lower()
         ingredients = list(Ingredient.objects.filter(
-            title__icontains=text).values('title', 'dimension'))
+            title__startswith=text).values('title', 'dimension'))
         return JsonResponse(ingredients, safe=False)

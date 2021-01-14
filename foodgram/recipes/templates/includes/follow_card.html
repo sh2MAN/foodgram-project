@@ -6,7 +6,7 @@
     </div>
     <div class="card-user__body">
         <ul class="card-user__items">
-            {% for recipe in follow.author.user_recipes.all|slice:3 %}
+            {% for recipe in follow.author.recipes.all|slice:3 %}
             {% thumbnail recipe.image "72x72" crop="center" upscale=True as image %}
             <li class="card-user__item">
                 <div class="recipe">

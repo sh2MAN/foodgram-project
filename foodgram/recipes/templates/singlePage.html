@@ -41,12 +41,12 @@
             </ul>
         </div>
         <ul class="single-card__items">
+            {% if request.user != recipe.author and user.is_authenticated %}
             {% if recipe|is_basket:user %}
             <li class="single-card__item"><button class="button button_style_blue" name="purchases"><span class="icon-plus"></span> Рецепт добавлен</button></li>
             {% else %}
             <li class="single-card__item"><button class="button button_style_blue" name="purchases" data-out><span class="icon-plus"></span> Добавить в покупки</button></li>
             {% endif%}
-            {% if request.user != recipe.author and user.is_authenticated %}
             <li class="single-card__item"><button class="button button_style_light-blue button_size_subscribe" name="subscribe" {% if not author|is_subscribe:user %}data-out{% endif %}>
                     {% if not author|is_subscribe:user %}Подписаться на автора{% else %}Отписаться от автора{% endif %}
                 </button></li>
