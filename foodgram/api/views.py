@@ -2,7 +2,7 @@ import json
 
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import JsonResponse
-from django.shortcuts import get_object_or_404, redirect
+from django.shortcuts import get_object_or_404
 from django.views import View
 from recipes.models import Ingredient, Recipe
 from users.models import User
@@ -71,7 +71,7 @@ class Purchase(LoginRequiredMixin, View):
     def delete(self, request, recipe_id):
         recipe = get_object_or_404(Recipe, id=recipe_id)
         request.user.basket_recipes.filter(recipe=recipe).delete()
-        return redirect('subscribe')
+        return JsonResponse({"success": True})
 
 
 class Ingredients(LoginRequiredMixin, View):
